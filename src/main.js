@@ -1,5 +1,5 @@
 import { OrbitControls } from 'three/examples/jsm/Addons.js';
-import './style.css'
+import './style.css';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { array } from 'three/tsl';
@@ -69,7 +69,7 @@ function loadSaturn(modelPath) {
 loadSaturn('src/models/saturn.glb');
 
 //Controles de órbita
-const controls = new OrbitControls(camera, renderer.domElement);
+// const controls = new OrbitControls(camera, renderer.domElement);
 
 function moveCamera() {
   const t = document.body.getBoundingClientRect().top;
