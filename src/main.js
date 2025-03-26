@@ -2,7 +2,6 @@ import { OrbitControls } from 'three/examples/jsm/Addons.js';
 import './style.css';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { array } from 'three/tsl';
 
 // Este es el setup
 const scene = new THREE.Scene();
@@ -14,7 +13,10 @@ renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 camera.position.setZ(30);
 camera.position.setX(-3);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.render(scene, camera);
+
 
 // Luces
 const spotlight = new THREE.SpotLight(0xffffff, 9, 100, Math.PI / 4, 0.5, 2);
@@ -27,6 +29,7 @@ scene.add(spotlight.target);
 //const spotlightHelper = new THREE.SpotLightHelper(spotlight);
 // Añadir el helper a la escena
 //scene.add(spotlightHelper);
+
 
 // Estrellas
 function addStar() {
@@ -60,6 +63,10 @@ function loadSaturn(modelPath) {
       saturn.position.set (-3, 0.4, -3);
       saturn.rotation.x = THREE.MathUtils.degToRad(22);
       saturn.scale.set(2, 2, 2);
+      saturn.traverse(function(node) {
+        if(node.isMesh)
+          node.castShadow = true;
+      });
       
       scene.add(saturn);
   }, undefined, (error) => {
@@ -73,9 +80,9 @@ loadSaturn('src/models/saturn.glb');
 
 function moveCamera() {
   const t = document.body.getBoundingClientRect().top;
-  camera.position.z = t * -0.006
-  camera.position.x = t * -0.0006
-  camera.position.y = t * 0.001;
+  camera.position.z = t * -0.008;
+  camera.position.x = t * -0.004;
+  camera.position.y = t * -0.001;
 }
 document.body.onscroll = moveCamera;
 moveCamera();
