@@ -18,15 +18,15 @@ renderer.render(scene, camera);
 
 // Luces
 const spotlight = new THREE.SpotLight(0xffffff, 9, 100, Math.PI / 4, 0.5, 2);
-spotlight.position.set(-8, 2, -4);  
-const targetPosition = new THREE.Vector3(3, 0, 1.1);  // Coordenadas de saturno
+spotlight.position.set(8, 1.4, 6);  
+const targetPosition = new THREE.Vector3(-3, 0.4, -3);  // Coordenadas de saturno
 spotlight.target.position.set(targetPosition.x, targetPosition.y, targetPosition.z);
 scene.add(spotlight);
 scene.add(spotlight.target);
 // Crear el helper para la spotlight
-const spotlightHelper = new THREE.SpotLightHelper(spotlight);
+//const spotlightHelper = new THREE.SpotLightHelper(spotlight);
 // Añadir el helper a la escena
-scene.add(spotlightHelper);
+//scene.add(spotlightHelper);
 
 // Estrellas
 function addStar() {
@@ -57,8 +57,8 @@ function loadSaturn(modelPath) {
   loader.load(modelPath, (gltf) => {
       
       saturn = gltf.scene;
-      saturn.position.set (3, 0, 1.1);
-      saturn.rotation.x = THREE.MathUtils.degToRad(150);
+      saturn.position.set (-3, 0.4, -3);
+      saturn.rotation.x = THREE.MathUtils.degToRad(22);
       saturn.scale.set(2, 2, 2);
       
       scene.add(saturn);
@@ -73,9 +73,9 @@ loadSaturn('src/models/saturn.glb');
 
 function moveCamera() {
   const t = document.body.getBoundingClientRect().top;
-  camera.position.z = t * -0.3;
-  camera.position.x = t * -0.002;
-  camera.rotation.y = t * -0.002;
+  camera.position.z = t * -0.006
+  camera.position.x = t * -0.0006
+  camera.position.y = t * 0.001;
 }
 document.body.onscroll = moveCamera;
 moveCamera();
@@ -97,7 +97,6 @@ function animate() {
     saturn.rotation.y += 0.0005;
   }
   
-  controls.update();
   renderer.render(scene, camera);
 }
 animate();
