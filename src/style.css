@@ -108,6 +108,43 @@ h3 {
   margin-top: 2rem;
 }
 
+.block {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 5rem;
+  background-color: #040714; /* Fully opaque dark color */
+  z-index: 10;
+  grid-column: 1 / -1;
+  box-shadow: 0 15px 35px rgba(10, 25, 47, 0.5);
+  border-radius: 0;
+  border: 1px solid rgba(100, 200, 255, 0.2);
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: -8px;
+  left: 0;
+  right: 0;
+}
+
+.block p {
+  max-width: 800px;
+  margin: 0 auto;
+  color: var(--text-primary);
+  font-family: 'Space Mono', monospace;
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+/* Override the hover effect specifically for .block */
+.block:hover {
+  transform: none;
+  box-shadow: 0 15px 35px rgba(10, 25, 47, 0.5);
+}
+
+
 /* Subtle glow and hover effects */
 section, header {
   transition: all 0.3s ease;
