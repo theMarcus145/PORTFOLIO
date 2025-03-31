@@ -75,44 +75,61 @@ function loadSaturn(modelPath) {
 }
 loadSaturn('src/models/saturn.glb');
 
-window.addEventListener('scroll', () => {
-  const scrollY = window.scrollY;
-  const triggerPoint = window.innerHeight * 1.1; 
 
-  if (scrollY >= triggerPoint && !transitionDone) {
-    transitionDone = true;
-    
-    // Movemos la cámara mientras la escena está oculta
-    gsap.to(camera.position, {
-      x: 5, y: 0, z: 5,
-      duration: 1.5,
-    });
-  }
-});
+// Initialize camera at the intended starting position
+camera.position.setZ(30);
+camera.position.setX(-3);
 
-//Controles de órbita
-// const controls = new OrbitControls(camera, renderer.domElement);
+// Store default camera position for reset purposes
+const defaultCameraPosition = {
+  x: -3,
+  y: 0,
+  z: 30
+};
 
+// Flag to track if we're in the block section
+let inBlockSection = false;
+
+// Function to handle camera movement on scroll
 function moveCamera() {
   const t = document.body.getBoundingClientRect().top;
-  camera.position.z = t * -0.008;
-  camera.position.x = t * -0.004;
-  camera.position.y = t * -0.001;
-}
-document.body.onscroll = moveCamera;
-
-// Detectar cuando el usuario hace scroll hasta la sección `.block`
-const blockSection = document.querySelector('.block');
-
-const observer = new IntersectionObserver((entries) => {
-  if (entry.isIntersecting) {
-    // Teletransportar la cámara a (0,0,0)
+  
+  // Only apply scroll-based camera movement when not in block section
+  if (!inBlockSection) {
+    camera.position.z = t * -0.008 + defaultCameraPosition.z;
+    camera.position.x = t * -0.004 + defaultCameraPosition.x;
+    camera.position.y = t * -0.001;
+  }
+  
+  // Check if we're at the block section
+  const blockRect = blockSection.getBoundingClientRect();
+  const isViewingBlock = blockRect.top < window.innerHeight && blockRect.bottom > 0;
+  
+  // Handle entering block section
+  if (isViewingBlock && !inBlockSection) {
+    inBlockSection = true;
     camera.position.set(0, 0, 0);
     camera.lookAt(0, 0, 0);
+  } 
+  // Handle exiting block section (moving back up)
+  else if (!isViewingBlock && inBlockSection) {
+    inBlockSection = false;
+    // Reset to position based on scroll
+    const newT = document.body.getBoundingClientRect().top;
+    camera.position.z = newT * -0.008 + defaultCameraPosition.z;
+    camera.position.x = newT * -0.004 + defaultCameraPosition.x;
+    camera.position.y = newT * -0.001;
   }
-}, { threshold: 0.5 });
+}
 
-observer.observe(blockSection);
+// Get reference to block section
+const blockSection = document.querySelector('.block');
+
+// Attach scroll handler
+document.body.onscroll = moveCamera;
+
+// Call once to set initial position
+moveCamera();
 
 function animate() {
   requestAnimationFrame(animate);
