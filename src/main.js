@@ -75,6 +75,21 @@ function loadSaturn(modelPath) {
 }
 loadSaturn('src/models/saturn.glb');
 
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  const triggerPoint = window.innerHeight * 1.1; 
+
+  if (scrollY >= triggerPoint && !transitionDone) {
+    transitionDone = true;
+    
+    // Movemos la cámara mientras la escena está oculta
+    gsap.to(camera.position, {
+      x: 5, y: 0, z: 5,
+      duration: 1.5,
+    });
+  }
+});
+
 //Controles de órbita
 // const controls = new OrbitControls(camera, renderer.domElement);
 
@@ -85,16 +100,19 @@ function moveCamera() {
   camera.position.y = t * -0.001;
 }
 document.body.onscroll = moveCamera;
-moveCamera();
-function onWindowResize() {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(window.innerWidth, window.innerHeight);
-}
-window.addEventListener('resize', onWindowResize);
 
+// Detectar cuando el usuario hace scroll hasta la sección `.block`
+const blockSection = document.querySelector('.block');
 
+const observer = new IntersectionObserver((entries) => {
+  if (entry.isIntersecting) {
+    // Teletransportar la cámara a (0,0,0)
+    camera.position.set(0, 0, 0);
+    camera.lookAt(0, 0, 0);
+  }
+}, { threshold: 0.5 });
+
+observer.observe(blockSection);
 
 function animate() {
   requestAnimationFrame(animate);
