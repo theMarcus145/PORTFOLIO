@@ -53,6 +53,7 @@ header {
   box-shadow: 0 10px 30px rgba(10, 25, 47, 0.7);
   backdrop-filter: blur(10px);
   text-align: center;
+  margin-bottom: 800px;
 }
 
 section {
@@ -171,4 +172,11 @@ section:hover, header:hover {
   blockquote p {
     font-size: 2rem;
   }
+}
+#scrollProgress {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  z-index: 99;
+  font-size: 3vh;
 }
