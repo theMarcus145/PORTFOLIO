@@ -113,8 +113,6 @@ function loadSaturn(modelPath) {
 }
 loadSaturn('src/models/saturn.glb');
 
-let tunnel;
-
 let tunnelMixer;
 
 function loadTunnel(modelPath) {
@@ -162,11 +160,15 @@ function scalePercent(start, end) {
   return (scrollPercent - start) / (end - start)
 }
 
+
+
+// ANIMACIONES
 const animationScripts = []
 
+// 0-32
 animationScripts.push({
   start: 0,
-  end: 100,
+  end: 32,
   func: () => {
     camera.position.x = lerp(1, 4, scalePercent(60, 80))
     camera.position.y = lerp(2, 4, scalePercent(60, 80))
@@ -174,6 +176,51 @@ animationScripts.push({
     console.log(camera.position.x + " " + camera.position.y)
   }
 })
+
+// 32-50: mover cámara hacia la derecha (aumentar x)
+animationScripts.push({
+  start: 32,
+  end: 50,
+  func: () => {
+    // Desplazamiento horizontal hacia la derecha
+    camera.position.x = lerp(-3.2017291066282416 , 6, scalePercent(32, 50)); // Se mueve de x=2 a x=6
+    camera.position.y = lerp(-0.8011527377521608, 1, scalePercent(32, 50)); // Ligero movimiento hacia arriba
+    
+    // Asegurarse de que la cámara siempre mira a Saturno
+    camera.lookAt(saturn.position);
+  }
+});
+
+// 50-90: girar la cámara 180º
+// Giro de 180 grados progresivo mientras deja de mirar a Saturno (del 50% al 90%)
+animationScripts.push({
+  start: 50,
+  end: 90,
+  func: () => {
+    // Obtener el progreso de la animación entre 0 y 1
+    const progress = scalePercent(50, 90);
+    
+    // Calcular la rotación actual (de 0 a 180 grados)
+    const rotationRadians = THREE.MathUtils.degToRad(progress * 180);
+    
+    // Crear un punto objetivo que gradualmente se aleja de Saturno
+    // Al inicio mira a Saturno (0,0,0) y al final mira en dirección opuesta
+    const lookX = Math.sin(rotationRadians) * 10;
+    const lookZ = -Math.cos(rotationRadians) * 10;
+    
+    // Punto al que mirará la cámara (cambiando gradualmente)
+    const targetPoint = new THREE.Vector3(lookX, 0, lookZ).add(camera.position);
+    camera.lookAt(targetPoint);
+    
+    // Continuar moviendo la cámara ligeramente para acentuar el efecto
+    camera.position.x = lerp(6, 8, progress);
+    camera.position.y = lerp(1, 2, progress);
+    
+    console.log("Rotación: " + rotationRadians + " grados, mirando a: " + targetPoint.x + ", " + targetPoint.y + ", " + targetPoint.z);
+  }
+});
+
+
 
 
 // Función para calcular el porcentaje de scroll de la página
