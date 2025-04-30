@@ -98,7 +98,7 @@ blockquote p {
     0 0 20px rgba(100, 200, 255, 0.2);
 }
 
-.left {
+.right {
   grid-column: 6 / 12;
   background: var(--nebula-purple);
 }
@@ -106,7 +106,8 @@ blockquote p {
 h3 {
   border-bottom: 2px solid var(--text-accent);
   padding-bottom: 0.5rem;
-  margin-top: 2rem;
+  margin-top: 0px;
+  margin-bottom: 10px;
 }
 
 .block {
@@ -179,4 +180,14 @@ section:hover, header:hover {
   left: 10px;
   z-index: 99;
   font-size: 3vh;
+}
+.visor1, .visor2{
+  max-width: 1200px;
+  border-radius: 20px;
+  margin-bottom: 5px;
+}
+.visor2{
+  max-width: 1200px;
+  border-radius: 20px;
+  margin-top: 10px;
 }

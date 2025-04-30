@@ -121,7 +121,7 @@ function loadTunnel(modelPath) {
   const loader = new GLTFLoader();
   loader.load(modelPath, (gltf) => {
     const tunnel = gltf.scene;
-    tunnel.position.set(0, 0, 0);
+    tunnel.position.set(1100, 0, 0);
     tunnel.rotation.x = THREE.MathUtils.degToRad(22);
     tunnel.scale.set(2, 2, 2);
 
