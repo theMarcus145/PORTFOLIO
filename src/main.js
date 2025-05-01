@@ -71,7 +71,7 @@ light.shadow.bias = -0.005;
 
 // Estrellas
 function addStar() {
-  const geometry = new THREE.SphereGeometry(0.125, 24, 24);
+  const geometry = new THREE.SphereGeometry(0.08, 24, 24);
  
   // Usamos MeshBasicMaterial para que las estrellas brillen sin emitir luz
   const material = new THREE.MeshBasicMaterial({ color: 0xffff00 }); // Amarillo brillante
@@ -98,7 +98,7 @@ function loadSaturn(modelPath) {
   loader.load(modelPath, (gltf) => {
       
       saturn = gltf.scene;
-      saturn.position.set (0, 0, 0);
+      saturn.position.set (0, 0, -2);
       saturn.rotation.x = THREE.MathUtils.degToRad(22);
       saturn.scale.set(2, 2, 2);
       saturn.traverse(function(node) {
@@ -111,7 +111,7 @@ function loadSaturn(modelPath) {
       console.error(`Error loading model:`, error);
   });
 }
-loadSaturn('src/models/saturn.glb');
+loadSaturn('src/models/jupiter.glb');
 
 let tunnelMixer;
 
@@ -165,58 +165,61 @@ function scalePercent(start, end) {
 // ANIMACIONES
 const animationScripts = []
 
-// 0-32
+// 0-10
 animationScripts.push({
   start: 0,
-  end: 32,
+  end: 10,
   func: () => {
-    camera.position.x = lerp(1, 4, scalePercent(60, 80))
-    camera.position.y = lerp(2, 4, scalePercent(60, 80))
-    camera.lookAt(0,0,0)
+    camera.position.x = lerp(-10, -5.630546555852936, scalePercent(0, 10))
+    camera.position.y = lerp(-2, 1.5, scalePercent(0, 10))
+    if (saturn){
+      console.log(" saturno " + saturn.position.x + " " + saturn.position.y )
+      camera.lookAt(saturn.position)
+    }
     console.log(camera.position.x + " " + camera.position.y)
+
+  
   }
 })
 
-// 32-50: mover cámara hacia la derecha (aumentar x)
+// 10 - 40
 animationScripts.push({
-  start: 32,
-  end: 50,
+  start: 10,
+  end: 40,
+  func: () => {
+    camera.position.x = lerp(-5.630546555852936, 10 , scalePercent(10, 40))
+
+    if (saturn){
+      saturn.position.z = lerp(-2, -4, scalePercent(10, 40));
+      console.log(" saturno " + saturn.position.x + " " + saturn.position.y )
+      camera.lookAt(saturn.position)
+    }
+    console.log(camera.position.x + " " + camera.position.y)
+
+  
+  }
+})
+
+// 40-70: mover cámara hacia la derecha (aumentar x)
+animationScripts.push({
+  start: 40,
+  end: 70,
   func: () => {
     // Desplazamiento horizontal hacia la derecha
-    camera.position.x = lerp(-3.2017291066282416 , 6, scalePercent(32, 50)); // Se mueve de x=2 a x=6
-    camera.position.y = lerp(-0.8011527377521608, 1, scalePercent(32, 50)); // Ligero movimiento hacia arriba
-    
-    // Asegurarse de que la cámara siempre mira a Saturno
-    camera.lookAt(saturn.position);
-  }
-});
+    camera.position.x = lerp(10 , 20, scalePercent(40, 70)); 
+    camera.position.y = lerp(1.5, 2, scalePercent(40, 70));
+    if (saturn) {
+      saturn.position.x = lerp(0, 10, scalePercent(40, 70));
+      saturn.position.y = lerp(0, 0.5, scalePercent(40, 70));
+      saturn.position.z = lerp(-4, -23, scalePercent(40, 70));
+    }
 
-// 50-90: girar la cámara 180º
-// Giro de 180 grados progresivo mientras deja de mirar a Saturno (del 50% al 90%)
-animationScripts.push({
-  start: 50,
-  end: 90,
-  func: () => {
-    // Obtener el progreso de la animación entre 0 y 1
-    const progress = scalePercent(50, 90);
-    
-    // Calcular la rotación actual (de 0 a 180 grados)
-    const rotationRadians = THREE.MathUtils.degToRad(progress * 180);
-    
-    // Crear un punto objetivo que gradualmente se aleja de Saturno
-    // Al inicio mira a Saturno (0,0,0) y al final mira en dirección opuesta
-    const lookX = Math.sin(rotationRadians) * 10;
-    const lookZ = -Math.cos(rotationRadians) * 10;
-    
-    // Punto al que mirará la cámara (cambiando gradualmente)
-    const targetPoint = new THREE.Vector3(lookX, 0, lookZ).add(camera.position);
-    camera.lookAt(targetPoint);
-    
-    // Continuar moviendo la cámara ligeramente para acentuar el efecto
-    camera.position.x = lerp(6, 8, progress);
-    camera.position.y = lerp(1, 2, progress);
-    
-    console.log("Rotación: " + rotationRadians + " grados, mirando a: " + targetPoint.x + ", " + targetPoint.y + ", " + targetPoint.z);
+    console.log(camera.position.x + " " + camera.position.y)
+
+    if (saturn){
+      console.log(" saturno " + saturn.position.x + " " + saturn.position.y )
+      
+    }
   }
 });
 

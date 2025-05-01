@@ -182,12 +182,12 @@ section:hover, header:hover {
   font-size: 3vh;
 }
 .visor1, .visor2{
-  max-width: 1200px;
+  max-width: 1350px;
   border-radius: 20px;
   margin-bottom: 5px;
 }
 .visor2{
-  max-width: 1200px;
+  max-width: 1350px;
   border-radius: 20px;
   margin-top: 10px;
 }
