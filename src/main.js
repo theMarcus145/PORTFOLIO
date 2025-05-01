@@ -1,24 +1,27 @@
-import { OrbitControls } from 'three/examples/jsm/Addons.js';
 import './style.css';
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/examples/jsm/Addons.js';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 
+// Importar nuestros módulos personalizados
+import { loadSaturn, loadTunnel, updateAnimations, updateSaturn } from './assets/loader.js';
+import { setupAnimations, playScrollAnimations, setupScroll } from './assets/animation.js';
 
+// Crear un reloj para las animaciones
 const clock = new THREE.Clock();
 
-// Este es el setup
+// Inicializar la escena
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-// Cámara
+// Configurar la cámara
 camera.position.setZ(3.4);
 camera.position.setX(2);
 camera.position.setY(0);
 
-// Renderer
+// Configurar el renderer
 const renderer = new THREE.WebGLRenderer({
   canvas: document.querySelector('#bg'),
 });
@@ -28,7 +31,7 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.render(scene, camera);
 
-// Postprocesado con Bloom
+// Configurar el postprocesado con Bloom
 const renderScene = new RenderPass(scene, camera);
 
 const bloomPass = new UnrealBloomPass(
@@ -45,9 +48,7 @@ const composer = new EffectComposer(renderer);
 composer.addPass(renderScene);
 composer.addPass(bloomPass);
 
-
-
-// Luces
+// Configurar luces
 const light = new THREE.DirectionalLight(0xffffff, 1);
 light.position.set(8, 1.4, 6);  
 const targetPosition = new THREE.Vector3(0, 0, 0);  // Coordenadas de saturno
@@ -55,9 +56,8 @@ light.target.position.set(targetPosition.x, targetPosition.y, targetPosition.z);
 scene.add(light);
 scene.add(light.target);
 
+// Configurar sombras
 light.castShadow = true;
-
-// Sombras
 light.shadow.mapSize.width = 1024;
 light.shadow.mapSize.height = 1024;
 light.shadow.camera.near = 0.5;
@@ -68,8 +68,7 @@ light.shadow.camera.top = 30;
 light.shadow.camera.bottom = -30;
 light.shadow.bias = -0.005;
 
-
-// Estrellas
+// Función para añadir estrellas
 function addStar() {
   const geometry = new THREE.SphereGeometry(0.08, 24, 24);
  
@@ -84,185 +83,52 @@ function addStar() {
   // Añadir la estrella a la escena (sin luz)
   scene.add(star);
 }
-// Llamamos a la función 200 veces para añadir estrellas que brillan
+
+// Añadir estrellas a la escena
 Array(200).fill().forEach(addStar);
 
+// Configurar los controladores de animación
+const animations = setupAnimations(camera);
+const getScrollPercent = setupScroll();
 
-// Saturno
-let saturn; 
-
-function loadSaturn(modelPath) {
-  // Crear loader
-  const loader = new GLTFLoader();
-  // Cargar modelo
-  loader.load(modelPath, (gltf) => {
-      
-      saturn = gltf.scene;
-      saturn.position.set (0, 0, -2);
-      saturn.rotation.x = THREE.MathUtils.degToRad(22);
-      saturn.scale.set(2, 2, 2);
-      saturn.traverse(function(node) {
-        if(node.isMesh)
-          node.castShadow = true;
-      });
-      
-      scene.add(saturn);
-  }, undefined, (error) => {
-      console.error(`Error loading model:`, error);
-  });
-}
-loadSaturn('src/models/jupiter.glb');
-
-let tunnelMixer;
-
-function loadTunnel(modelPath) {
-  const loader = new GLTFLoader();
-  loader.load(modelPath, (gltf) => {
-    const tunnel = gltf.scene;
-    tunnel.position.set(1100, 0, 0);
-    tunnel.rotation.x = THREE.MathUtils.degToRad(22);
-    tunnel.scale.set(2, 2, 2);
-
-    tunnel.traverse((node) => {
-      if (node.isMesh) {
-        node.castShadow = true;
-        node.receiveShadow = true;
-      }
-    });
-
-    scene.add(tunnel);
-
-    // Configurar el mixer para las animaciones
-    if (gltf.animations && gltf.animations.length > 0) {
-      tunnelMixer = new THREE.AnimationMixer(tunnel);
-      gltf.animations.forEach((clip) => {
-        tunnelMixer.clipAction(clip).play();
-      });
-    }
-  }, undefined, (error) => {
-    console.error('Error loading tunnel model:', error);
-  });
-}
-
-
-
-loadTunnel('src/models/spacedrive.glb');
-
-
-function lerp(x, y, a) {
-  return (1 - a) * x + a * y
-}
-
-
-// Llamar a esta función para definir distintas animaciones dependiendo del scroll. 
-// Colocando el principio y el final de la animación
-function scalePercent(start, end) {
-  return (scrollPercent - start) / (end - start)
-}
-
-
-
-// ANIMACIONES
-const animationScripts = []
-
-// 0-10
-animationScripts.push({
-  start: 0,
-  end: 10,
-  func: () => {
-    camera.position.x = lerp(-10, -5.630546555852936, scalePercent(0, 10))
-    camera.position.y = lerp(-2, 1.5, scalePercent(0, 10))
-    if (saturn){
-      console.log(" saturno " + saturn.position.x + " " + saturn.position.y )
-      camera.lookAt(saturn.position)
-    }
-    console.log(camera.position.x + " " + camera.position.y)
-
-  
-  }
-})
-
-// 10 - 40
-animationScripts.push({
-  start: 10,
-  end: 40,
-  func: () => {
-    camera.position.x = lerp(-5.630546555852936, 10 , scalePercent(10, 40))
-
-    if (saturn){
-      saturn.position.z = lerp(-2, -4, scalePercent(10, 40));
-      console.log(" saturno " + saturn.position.x + " " + saturn.position.y )
-      camera.lookAt(saturn.position)
-    }
-    console.log(camera.position.x + " " + camera.position.y)
-
-  
-  }
-})
-
-// 40-70: mover cámara hacia la derecha (aumentar x)
-animationScripts.push({
-  start: 40,
-  end: 70,
-  func: () => {
-    // Desplazamiento horizontal hacia la derecha
-    camera.position.x = lerp(10 , 20, scalePercent(40, 70)); 
-    camera.position.y = lerp(1.5, 2, scalePercent(40, 70));
-    if (saturn) {
-      saturn.position.x = lerp(0, 10, scalePercent(40, 70));
-      saturn.position.y = lerp(0, 0.5, scalePercent(40, 70));
-      saturn.position.z = lerp(-4, -23, scalePercent(40, 70));
-    }
-
-    console.log(camera.position.x + " " + camera.position.y)
-
-    if (saturn){
-      console.log(" saturno " + saturn.position.x + " " + saturn.position.y )
-      
-    }
-  }
+// Cargar modelos
+Promise.all([
+  loadSaturn('src/models/jupiter.glb', scene),
+  loadTunnel('src/models/spacedrive.glb', scene)
+]).then(() => {
+  console.log('Todos los modelos cargados correctamente');
+}).catch(error => {
+  console.error('Error cargando modelos:', error);
 });
 
-
-
-
-// Función para calcular el porcentaje de scroll de la página
-let scrollPercent = 0;
-
-document.body.onscroll = () => {
-  scrollPercent = (document.documentElement.scrollTop / 
-    (document.documentElement.scrollHeight - document.documentElement.clientHeight)) * 100;
-
-  const scrollElement = document.getElementById('scrollProgress');
-  if (scrollElement) {
-    scrollElement.innerText = 'Scroll Progress: ' + scrollPercent.toFixed(2) + '%';
-  }
-};
-
-
-function playScrollAnimations() {
-  animationScripts.forEach((a) => {
-      if (scrollPercent >= a.start && scrollPercent < a.end) {
-          a.func()
-      }
-  })
-}
-
+// Función de animación principal
 function animate() {
   requestAnimationFrame(animate);
 
-  const delta = clock.getDelta(); // Agrega un reloj global
-
-  if (saturn) {
-    saturn.rotation.y += 0.0005;
-  }
-
-  if (tunnelMixer) {
-    tunnelMixer.update(delta); // Avanzar animaciones del túnel
-  }
-
-  playScrollAnimations();
+  const delta = clock.getDelta();
+  const scrollPercent = getScrollPercent();
+  
+  // Actualizar rotaciones y animaciones
+  updateSaturn();
+  updateAnimations(delta);
+  
+  // Aplicar animaciones de scroll
+  playScrollAnimations(scrollPercent, animations);
+  
+  // Renderizar la escena con postprocesado
   composer.render();
 }
 
+// Iniciar el bucle de animación
 animate();
+
+// Manejar el redimensionamiento de la ventana
+window.addEventListener('resize', () => {
+  // Actualizar cámara
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  
+  // Actualizar renderer
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  composer.setSize(window.innerWidth, window.innerHeight);
+});
