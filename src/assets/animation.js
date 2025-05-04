@@ -1,4 +1,4 @@
-import { saturn } from './loader.js';
+import { jupiter } from './loader.js';
 
 // Función para interpolación lineal
 function lerp(x, y, a) {
@@ -23,8 +23,9 @@ function setupAnimations(camera) {
       camera.position.x = lerp(-10, -5.630546555852936, scalePercent(scrollPercent, 0, 10));
       camera.position.y = lerp(-2, 1.5, scalePercent(scrollPercent, 0, 10));
       
-      if (saturn) {
-        camera.lookAt(saturn.position);
+      if (jupiter) {
+        jupiter.rotation.y += lerp(0, Math.PI, scalePercent(scrollPercent, 0, 10000));
+        camera.lookAt(jupiter.position);
       }
     }
   });
@@ -36,9 +37,9 @@ function setupAnimations(camera) {
     func: (scrollPercent) => {
       camera.position.x = lerp(-5.630546555852936, 10, scalePercent(scrollPercent, 10, 40));
 
-      if (saturn) {
-        saturn.position.z = lerp(-2, -4, scalePercent(scrollPercent, 10, 40));
-        camera.lookAt(saturn.position);
+      if (jupiter) {
+        jupiter.position.z = lerp(-2, -4, scalePercent(scrollPercent, 10, 40));
+        camera.lookAt(jupiter.position);
       }
     }
   });
@@ -49,14 +50,13 @@ function setupAnimations(camera) {
     end: 70,
     func: (scrollPercent) => {
       // Desplazamiento horizontal hacia la derecha
-      camera.position.x = lerp(10, 20, scalePercent(scrollPercent, 40, 70)); 
+      camera.position.x = lerp(10, 15, scalePercent(scrollPercent, 40, 70)); 
       camera.position.y = lerp(1.5, 2, scalePercent(scrollPercent, 40, 70));
       
-      if (saturn) {
-        saturn.position.x = lerp(0, 10, scalePercent(scrollPercent, 40, 70));
-        saturn.position.y = lerp(0, 0.5, scalePercent(scrollPercent, 40, 70));
-        saturn.position.z = lerp(-4, -23, scalePercent(scrollPercent, 40, 70));
-        camera.lookAt(saturn.position);
+      if (jupiter) {
+        jupiter.position.x = lerp(0, 10, scalePercent(scrollPercent, 40, 70));
+        jupiter.position.y = lerp(0, 0.5, scalePercent(scrollPercent, 40, 70));
+        jupiter.position.z = lerp(-4, -17, scalePercent(scrollPercent, 40, 70));
       }
     }
   });

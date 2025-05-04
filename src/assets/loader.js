@@ -2,34 +2,29 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 // Variables para almacenar los objetos y mixers
-let saturn;
+let jupiter;
 let tunnelMixer;
 
-/**
- * Carga el modelo de Saturno
- * @param {string} modelPath - Ruta al modelo GLTF
- * @param {THREE.Scene} scene - Escena donde se añadirá el modelo
- * @returns {Promise} - Promesa que resuelve con el objeto saturn cuando se carga
- */
-function loadSaturn(modelPath, scene) {
+
+function loadJupiter(modelPath, scene) {
   return new Promise((resolve, reject) => {
     // Crear loader
     const loader = new GLTFLoader();
     
     // Cargar modelo
     loader.load(modelPath, (gltf) => {
-      saturn = gltf.scene;
-      saturn.position.set(0, 0, -2);
-      saturn.rotation.x = THREE.MathUtils.degToRad(22);
-      saturn.scale.set(2, 2, 2);
+      jupiter = gltf.scene;
+      jupiter.position.set(0, 0, -2);
+      jupiter.rotation.x = THREE.MathUtils.degToRad(22);
+      jupiter.scale.set(2, 2, 2);
       
-      saturn.traverse(function(node) {
+      jupiter.traverse(function(node) {
         if(node.isMesh)
           node.castShadow = true;
       });
       
-      scene.add(saturn);
-      resolve(saturn);
+      scene.add(jupiter);
+      resolve(jupiter);
     }, undefined, (error) => {
       console.error(`Error loading model:`, error);
       reject(error);
@@ -37,12 +32,7 @@ function loadSaturn(modelPath, scene) {
   });
 }
 
-/**
- * Carga el modelo del túnel espacial
- * @param {string} modelPath - Ruta al modelo GLTF
- * @param {THREE.Scene} scene - Escena donde se añadirá el modelo
- * @returns {Promise} - Promesa que resuelve con el objeto tunnel cuando se carga
- */
+
 function loadTunnel(modelPath, scene) {
   return new Promise((resolve, reject) => {
     const loader = new GLTFLoader();
@@ -85,19 +75,18 @@ function updateAnimations(delta) {
   }
 }
 
-// Función para actualizar la rotación de Saturno
-function updateSaturn() {
-  if (saturn) {
-    saturn.rotation.y += 0.0005;
-  }
+
+// Función para actualizar la rotación de Jupiter
+function updateJupiter() {
+
 }
 
 // Exportamos las funciones y objetos necesarios
 export { 
-  loadSaturn, 
+  loadJupiter, 
   loadTunnel, 
   updateAnimations, 
-  updateSaturn, 
-  saturn,
+  updateJupiter, 
+  jupiter,
   tunnelMixer 
 };

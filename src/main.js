@@ -6,7 +6,7 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 
 // Importar nuestros módulos personalizados
-import { loadSaturn, loadTunnel, updateAnimations, updateSaturn } from './assets/loader.js';
+import { loadJupiter, loadTunnel, updateAnimations, updateJupiter } from './assets/loader.js';
 import { setupAnimations, playScrollAnimations, setupScroll } from './assets/animation.js';
 
 // Crear un reloj para las animaciones
@@ -51,7 +51,7 @@ composer.addPass(bloomPass);
 // Configurar luces
 const light = new THREE.DirectionalLight(0xffffff, 1);
 light.position.set(8, 1.4, 6);  
-const targetPosition = new THREE.Vector3(0, 0, 0);  // Coordenadas de saturno
+const targetPosition = new THREE.Vector3(0, 0, 0);  // Coordenadas de jupiter
 light.target.position.set(targetPosition.x, targetPosition.y, targetPosition.z);
 scene.add(light);
 scene.add(light.target);
@@ -93,7 +93,7 @@ const getScrollPercent = setupScroll();
 
 // Cargar modelos
 Promise.all([
-  loadSaturn('src/models/jupiter.glb', scene),
+  loadJupiter('src/models/jupiter.glb', scene),
   loadTunnel('src/models/spacedrive.glb', scene)
 ]).then(() => {
   console.log('Todos los modelos cargados correctamente');
@@ -109,7 +109,7 @@ function animate() {
   const scrollPercent = getScrollPercent();
   
   // Actualizar rotaciones y animaciones
-  updateSaturn();
+  updateJupiter();
   updateAnimations(delta);
   
   // Aplicar animaciones de scroll

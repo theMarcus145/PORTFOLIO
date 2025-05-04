@@ -1,5 +1,5 @@
 @import url("https://use.typekit.net/jmk3xov.css");
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
 
 :root {
   --space-dark: rgba(4, 7, 20, 0.95);
@@ -15,6 +15,7 @@ body {
   background-color: #020616;
   color: var(--text-primary);
   overflow-x: hidden;
+  font-family: 'JetBrains Mono', monospace;
 }
 
 canvas {
@@ -36,7 +37,7 @@ main {
 }
 
 a, h1, h2, h3, blockquote {
-  font-family: 'Orbitron', sans-serif;
+  font-family: 'JetBrains Mono', monospace;
   font-weight: 700;
   color: var(--text-accent);
   text-shadow: 0 0 10px rgba(100, 200, 255, 0.5);
@@ -60,7 +61,7 @@ section {
   grid-column: 2 / 8;
   padding: 2rem;
   background: var(--space-blue);
-  font-family: 'Space Mono', monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 1.1rem;
   line-height: 1.7;
   margin-bottom: var(--spacing);
@@ -85,7 +86,7 @@ blockquote {
 }
 
 blockquote p {
-  font-family: 'Orbitron', sans-serif;
+  font-family: 'JetBrains Mono', monospace;
   color: var(--text-accent);
   background: linear-gradient(45deg, rgba(10, 25, 47, 0.9), rgba(35, 20, 65, 0.9));
   padding: 1rem 2rem;
@@ -135,7 +136,7 @@ h3 {
   max-width: 800px;
   margin: 0 auto;
   color: var(--text-primary);
-  font-family: 'Space Mono', monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 1.1rem;
   line-height: 1.7;
 }
@@ -159,6 +160,21 @@ section:hover, header:hover {
     0 0 30px rgba(100, 200, 255, 0.3);
 }
 
+/* Image styling for proper containment */
+.visor1, .visor2 {
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.visor2 {
+  margin-top: 10px;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   main {
@@ -173,21 +189,17 @@ section:hover, header:hover {
   blockquote p {
     font-size: 2rem;
   }
+  
+  .visor1, .visor2 {
+    border-radius: 10px;
+  }
 }
+
 #scrollProgress {
   position: fixed;
   bottom: 10px;
   left: 10px;
   z-index: 99;
   font-size: 3vh;
-}
-.visor1, .visor2{
-  max-width: 1350px;
-  border-radius: 20px;
-  margin-bottom: 5px;
-}
-.visor2{
-  max-width: 1350px;
-  border-radius: 20px;
-  margin-top: 10px;
+  font-family: 'JetBrains Mono', monospace;
 }
