@@ -39,7 +39,7 @@ function loadTunnel(modelPath, scene) {
     
     loader.load(modelPath, (gltf) => {
       const tunnel = gltf.scene;
-      tunnel.position.set(1100, 0, 0);
+      tunnel.position.set(0, -1000, 0);
       tunnel.rotation.x = THREE.MathUtils.degToRad(22);
       tunnel.scale.set(2, 2, 2);
 
@@ -56,9 +56,12 @@ function loadTunnel(modelPath, scene) {
       if (gltf.animations && gltf.animations.length > 0) {
         tunnelMixer = new THREE.AnimationMixer(tunnel);
         gltf.animations.forEach((clip) => {
-          tunnelMixer.clipAction(clip).play();
+          const action = tunnelMixer.clipAction(clip);
+          action.timeScale = 2.0; // 🔥 Speed up animation (2x faster)
+          action.play();
         });
       }
+
       
       resolve({ tunnel, tunnelMixer });
     }, undefined, (error) => {
@@ -75,18 +78,11 @@ function updateAnimations(delta) {
   }
 }
 
-
-// Función para actualizar la rotación de Jupiter
-function updateJupiter() {
-
-}
-
 // Exportamos las funciones y objetos necesarios
 export { 
   loadJupiter, 
   loadTunnel, 
   updateAnimations, 
-  updateJupiter, 
   jupiter,
   tunnelMixer 
 };

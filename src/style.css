@@ -81,7 +81,7 @@ header {
   text-align: center;
   margin-bottom: 800px;
   border: 1px solid var(--border);
-  animation: fadeInUp 1s ease-out;
+  animation: fadeInUp 0.3s ease-out;
 }
 
 header h1 {
@@ -104,7 +104,7 @@ section {
     0 0 20px rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(5px);
   opacity: 0;
-  animation: fadeInUp 1s ease-out forwards;
+  animation: fadeInUp 0.3s ease-out forwards;
   animation-play-state: paused;
 }
 
@@ -124,7 +124,7 @@ blockquote {
   grid-column: 2 / span 9;
   margin-bottom: var(--spacing);
   opacity: 0;
-  animation: fadeInUp 1s ease-out forwards;
+  animation: fadeInUp 0.3s ease-out forwards;
   animation-play-state: paused;
 }
 
@@ -183,7 +183,7 @@ h3 {
   height: 100vh;
   margin: 0;
   padding: 5rem;
-  background-color: rgba(0, 0, 0, 0.95);
+  background-color: rgba(0, 0, 0, 1);
   z-index: 10;
   grid-column: 1 / -1;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);

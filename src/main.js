@@ -6,7 +6,7 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 
 // Importar nuestros módulos personalizados
-import { loadJupiter, loadTunnel, updateAnimations, updateJupiter } from './assets/loader.js';
+import { loadJupiter, loadTunnel, updateAnimations } from './assets/loader.js';
 import { setupAnimations, playScrollAnimations, setupScroll } from './assets/animation.js';
 
 // Crear un reloj para las animaciones
@@ -70,7 +70,7 @@ light.shadow.bias = -0.005;
 
 // Función para añadir estrellas
 function addStar() {
-  const geometry = new THREE.SphereGeometry(0.08, 24, 24);
+  const geometry = new THREE.SphereGeometry(0.05, 24, 24);
  
   // Usamos MeshBasicMaterial para que las estrellas brillen sin emitir luz
   const material = new THREE.MeshBasicMaterial({ color: 0xffff00 }); // Amarillo brillante
@@ -109,7 +109,6 @@ function animate() {
   const scrollPercent = getScrollPercent();
   
   // Actualizar rotaciones y animaciones
-  updateJupiter();
   updateAnimations(delta);
   
   // Aplicar animaciones de scroll

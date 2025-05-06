@@ -52,12 +52,36 @@ function setupAnimations(camera) {
       // Desplazamiento horizontal hacia la derecha
       camera.position.x = lerp(10, 15, scalePercent(scrollPercent, 40, 70)); 
       camera.position.y = lerp(1.5, 2, scalePercent(scrollPercent, 40, 70));
+      camera.lookAt(0, 0, -4)
       
       if (jupiter) {
         jupiter.position.x = lerp(0, 10, scalePercent(scrollPercent, 40, 70));
         jupiter.position.y = lerp(0, 0.5, scalePercent(scrollPercent, 40, 70));
-        jupiter.position.z = lerp(-4, -17, scalePercent(scrollPercent, 40, 70));
+        jupiter.position.z = lerp(-4, -8.2, scalePercent(scrollPercent, 40, 70));
       }
+    }
+  });
+
+    // 70-90% scroll
+    animationScripts.push({
+      start: 70,
+      end: 90,
+      func: (scrollPercent) => {
+        camera.lookAt(0, 0, -4)
+        camera.position.z = (3.4);
+        camera.position.x = (15);
+        camera.position.y = (2);
+      }
+    });
+
+  // 90-100% scroll
+  animationScripts.push({
+    start: 90,
+    end: 100,
+    func: (scrollPercent) => {
+      // Desplazamiento horizontal hacia la derecha
+      camera.position.set(0, -1000, 0);
+      camera.lookAt(0, -1000, -5);
     }
   });
 
@@ -107,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const observerOptions = {
     root: null, // use viewport as root
     rootMargin: '0px',
-    threshold: 0.2 // trigger when 20% of element is visible
+    threshold: 0.15 // trigger when 15% of element is visible
   };
   
   // Create intersection observer
