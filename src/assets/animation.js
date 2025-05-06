@@ -96,6 +96,39 @@ function setupScroll() {
   return () => scrollPercent;
 }
 
+// This script adds intersection observer functionality
+// to trigger animations when elements scroll into view
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Select all sections and blockquotes 
+  const animatedElements = document.querySelectorAll('section, blockquote');
+  
+  // Create observer options
+  const observerOptions = {
+    root: null, // use viewport as root
+    rootMargin: '0px',
+    threshold: 0.2 // trigger when 20% of element is visible
+  };
+  
+  // Create intersection observer
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        // Add visible class to start animation
+        entry.target.classList.add('visible');
+        
+        // Unobserve once animation is triggered
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+  
+  // Observe all animated elements
+  animatedElements.forEach(element => {
+    observer.observe(element);
+  });
+});
+
 export { 
   setupAnimations, 
   playScrollAnimations, 
