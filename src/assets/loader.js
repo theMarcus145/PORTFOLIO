@@ -3,11 +3,15 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 // Variables para almacenar los objetos y mixers
 let jupiter;
+let sun;
+let cluster;
+let rays;
+let raysMixer;
+let tunnel;
 let tunnelMixer;
 let galaxy;
-let galaxyMixer; // ✅ Mixer para la galaxia
-let cluster;
-let sun;
+let galaxyMixer;
+
 
 function loadJupiter(modelPath, scene) {
   return new Promise((resolve, reject) => {
@@ -89,9 +93,8 @@ function loadSun(modelPath, scene) {
   return new Promise((resolve, reject) => {
     const loader = new GLTFLoader();
     loader.load(modelPath, (gltf) => {
-      const sun = gltf.scene;
+      sun = gltf.scene;
       sun.position.set(900, 400, 120);
-      sun.rotation.x = THREE.MathUtils.degToRad(22);
       sun.scale.set(1.6, 1.6, 1.6);
 
       sun.traverse(node => {
@@ -113,13 +116,42 @@ function loadSun(modelPath, scene) {
   });
 }
 
+function loadRays(modelPath, scene) {
+  return new Promise((resolve, reject) => {
+    const loader = new GLTFLoader();
+    loader.load(modelPath, (gltf) => {
+      rays = gltf.scene;
+      rays.position.set(900, 393.5, 119.3);
+      rays.scale.set(9, 9, 9);
 
+      rays.traverse(node => {
+        if (node.isMesh) node.castShadow = true;
+      });
+
+      scene.add(rays);
+
+      // ✅ Añadir animaciones si existen
+      if (gltf.animations && gltf.animations.length > 0) {
+        raysMixer = new THREE.AnimationMixer(rays);
+        gltf.animations.forEach((clip) => {
+          const action = raysMixer.clipAction(clip);
+          action.play();
+        });
+      }
+
+      resolve(rays);
+    }, undefined, (error) => {
+      console.error(`Error loading model:`, error);
+      reject(error);
+    });
+  });
+}
 
 function loadTunnel(modelPath, scene) {
   return new Promise((resolve, reject) => {
     const loader = new GLTFLoader();
     loader.load(modelPath, (gltf) => {
-      const tunnel = gltf.scene;
+      tunnel = gltf.scene;
       tunnel.position.set(0, -1000, 0);
       tunnel.rotation.x = THREE.MathUtils.degToRad(22);
       tunnel.scale.set(2, 2, 2);
@@ -151,6 +183,7 @@ function loadTunnel(modelPath, scene) {
 function updateAnimations(delta) {
   if (tunnelMixer) tunnelMixer.update(delta);
   if (galaxyMixer) galaxyMixer.update(delta);
+  if (raysMixer) raysMixer.update(delta);
 }
 
 export { 
@@ -159,6 +192,7 @@ export {
   loadGalaxy,
   loadCluster,
   loadSun,
+  loadRays,
   updateAnimations, 
   jupiter,
 };

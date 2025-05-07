@@ -77,7 +77,7 @@ header {
   margin-bottom: var(--spacing);
   border-radius: 4px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(1px);
   text-align: center;
   margin-bottom: 900px;
   border-bottom: 1px solid var(--border);
@@ -395,6 +395,32 @@ li::before {
 #scrollProgress:hover {
   opacity: 1;
 }
+.pixelup-button{
+  margin-top: 60px;
+  margin-bottom: -1000px;
+  padding: 25px;
+}
+
 .visor-button{
+  padding: 10px;
+}
+
+.visor-button, .pixelup-button {
   font-size: 15px;
+  font-family: 'Orbitron', sans-serif;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.visor-button:hover, .pixelup-button:hover {
+  cursor: pointer;
+  transform: translateY(-1px);
+  box-shadow: 
+    0 15px 30px rgba(0, 0, 0, 0.7),
+    0 0 20px rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+
 }

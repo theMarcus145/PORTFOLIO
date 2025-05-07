@@ -5,7 +5,7 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 
-import { loadJupiter, loadTunnel, loadGalaxy, loadCluster, updateAnimations, loadSun } from './assets/loader.js';
+import { loadJupiter, loadTunnel, loadGalaxy, loadCluster, updateAnimations, loadSun, loadRays } from './assets/loader.js';
 import { setupAnimations, playScrollAnimations, setupScroll } from './assets/animation.js';
 
 // Crear un reloj para las animaciones
@@ -49,7 +49,7 @@ composer.addPass(bloomPass);
 
 // Configurar luces
 const light = new THREE.DirectionalLight(0xffefd9, 0.8);
-light.position.set(70, 3, 6);  
+light.position.set(90, 3, 6);  
 const targetPosition = new THREE.Vector3(0, 0, -2);  // Coordenadas de jupiter
 light.target.position.set(targetPosition.x, targetPosition.y, targetPosition.z);
 scene.add(light);
@@ -110,7 +110,8 @@ Promise.all([
   loadTunnel('src/models/spacedrive.glb', scene),
   loadGalaxy('src/models/galaxy.glb', scene),
   loadCluster('src/models/cluster.glb', scene),
-  loadSun('src/models/sun.glb', scene)
+  loadSun('src/models/sun.glb', scene),
+  loadRays('src/models/rays.glb', scene),
 ]).then(() => {
   console.log('Todos los modelos cargados correctamente');
 }).catch(error => {
