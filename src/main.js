@@ -5,8 +5,7 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 
-// Importar nuestros módulos personalizados
-import { loadJupiter, loadTunnel, updateAnimations } from './assets/loader.js';
+import { loadJupiter, loadTunnel, loadGalaxy, loadCluster, updateAnimations, loadSun } from './assets/loader.js';
 import { setupAnimations, playScrollAnimations, setupScroll } from './assets/animation.js';
 
 // Crear un reloj para las animaciones
@@ -14,7 +13,7 @@ const clock = new THREE.Clock();
 
 // Inicializar la escena
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
 
 // Configurar la cámara
 camera.position.setZ(3.4);
@@ -49,9 +48,9 @@ composer.addPass(renderScene);
 composer.addPass(bloomPass);
 
 // Configurar luces
-const light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(8, 1.4, 6);  
-const targetPosition = new THREE.Vector3(0, 0, 0);  // Coordenadas de jupiter
+const light = new THREE.DirectionalLight(0xffefd9, 0.8);
+light.position.set(70, 3, 6);  
+const targetPosition = new THREE.Vector3(0, 0, -2);  // Coordenadas de jupiter
 light.target.position.set(targetPosition.x, targetPosition.y, targetPosition.z);
 scene.add(light);
 scene.add(light.target);
@@ -70,17 +69,31 @@ light.shadow.bias = -0.005;
 
 // Función para añadir estrellas
 function addStar() {
-  const geometry = new THREE.SphereGeometry(0.05, 24, 24);
- 
-  // Usamos MeshBasicMaterial para que las estrellas brillen sin emitir luz
-  const material = new THREE.MeshBasicMaterial({ color: 0xffff00 }); // Amarillo brillante
+  const geometry = new THREE.SphereGeometry(0.075, 24, 24); // Tamaño y forma de las estrellitas
+  let material; // Material
+  
+  const colorChoice = Math.floor(Math.random() * 3) + 1; // Generar un número aleatorio para luego asignar color
+
+  switch (colorChoice) {
+    case 1:
+      material = new THREE.MeshBasicMaterial({ color: 0xffff00 }); // Amarillo
+      break;
+    case 2:
+      material = new THREE.MeshBasicMaterial({ color: 0xc6eeee }); // Azul claro
+      break;
+    case 3:
+      material = new THREE.MeshBasicMaterial({ color: 0xffaaff }); // Magenta
+      break;
+    default:
+      material = new THREE.MeshBasicMaterial({ color: 0xffffff }); // Blanco
+      break;
+  }
+
   const star = new THREE.Mesh(geometry, material);
- 
-  // Generar posiciones aleatorias
-  const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(100));
+
+  const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(400));
   star.position.set(x, y, z);
- 
-  // Añadir la estrella a la escena (sin luz)
+
   scene.add(star);
 }
 
@@ -94,7 +107,10 @@ const getScrollPercent = setupScroll();
 // Cargar modelos
 Promise.all([
   loadJupiter('src/models/jupiter.glb', scene),
-  loadTunnel('src/models/spacedrive.glb', scene)
+  loadTunnel('src/models/spacedrive.glb', scene),
+  loadGalaxy('src/models/galaxy.glb', scene),
+  loadCluster('src/models/cluster.glb', scene),
+  loadSun('src/models/sun.glb', scene)
 ]).then(() => {
   console.log('Todos los modelos cargados correctamente');
 }).catch(error => {

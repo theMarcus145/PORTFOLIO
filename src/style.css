@@ -70,17 +70,17 @@ a, h1, h2, h3, blockquote {
 }
 
 header {
-  background: var(--space-dark);
-  grid-column: 7 / span 5;
+  background: transparent;
+  grid-column: 2 / span 7;
   font-size: 2.5rem;
   padding: 1.5rem;
   margin-bottom: var(--spacing);
   border-radius: 4px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0);
   backdrop-filter: blur(10px);
   text-align: center;
-  margin-bottom: 800px;
-  border: 1px solid var(--border);
+  margin-bottom: 900px;
+  border-bottom: 1px solid var(--border);
   animation: fadeInUp 0.3s ease-out;
 }
 
@@ -317,13 +317,7 @@ section, header {
   transition: all 0.3s ease;
 }
 
-section:hover, header:hover {
-  transform: translateY(-5px);
-  box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.7),
-    0 0 30px rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
-}
+
 
 /* Override the hover effect specifically for .block */
 .block:hover {
