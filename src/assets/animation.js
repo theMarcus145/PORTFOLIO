@@ -13,73 +13,73 @@ function scalePercent(scrollPercent, start, end) {
 // Array para almacenar las secuencias de animaciones
 const animationScripts = [];
 
+//LA POSICIÓN INICIAL DE JUPITER ES: jupiter.position.set(0, 0, -2);
 // Función para inicializar las animaciones basadas en scroll
 function setupAnimations(camera) {
-  // 0-10% scroll
   animationScripts.push({
     start: 0,
     end: 10,
-    func: (scrollPercent) => {
-      camera.position.x = lerp(-10, -5.630546555852936, scalePercent(scrollPercent, 0, 10));
-      camera.position.y = lerp(-2, 1.5, scalePercent(scrollPercent, 0, 10));
+    func: function(scrollPercent) {
+      camera.position.x = lerp(-10, -5.630546555852936, scalePercent(scrollPercent, this.start, this.end));
+      camera.position.y = lerp(-2, 1.5, scalePercent(scrollPercent, this.start, this.end));
       
       if (jupiter) {
-        jupiter.rotation.y += lerp(0, Math.PI, scalePercent(scrollPercent, 0, 10000));
+        jupiter.rotation.y = lerp(0, Math.PI / 4, scalePercent(scrollPercent, this.start, this.end));
         camera.lookAt(jupiter.position);
       }
     }
   });
 
-  // 10-40% scroll
   animationScripts.push({
     start: 10,
     end: 40,
-    func: (scrollPercent) => {
-      camera.position.x = lerp(-5.630546555852936, 10, scalePercent(scrollPercent, 10, 40));
+    func: function(scrollPercent) {
+      camera.position.x = lerp(-5.630546555852936, 10, scalePercent(scrollPercent, this.start, this.end));
 
       if (jupiter) {
-        jupiter.position.z = lerp(-2, -4, scalePercent(scrollPercent, 10, 40));
+        jupiter.position.z = lerp(-2, -4, scalePercent(scrollPercent, this.start, this.end));
+        jupiter.rotation.y = lerp(Math.PI / 4, Math.PI, scalePercent(scrollPercent, this.start, this.end));
         camera.lookAt(jupiter.position);
       }
     }
   });
 
-  // 40-70% scroll
   animationScripts.push({
     start: 40,
-    end: 70,
-    func: (scrollPercent) => {
-      // Desplazamiento horizontal hacia la derecha
-      camera.position.x = lerp(10, 15, scalePercent(scrollPercent, 40, 70)); 
-      camera.position.y = lerp(1.5, 2, scalePercent(scrollPercent, 40, 70));
-      camera.lookAt(0, 0, -4)
+    end: 55,
+    func: function(scrollPercent) {
+      camera.position.x = lerp(10, 15, scalePercent(scrollPercent, this.start, this.end)); 
+      camera.position.y = lerp(1.5, 2, scalePercent(scrollPercent, this.start, this.end));
+      camera.lookAt(0, 0, -4);
       
       if (jupiter) {
-        jupiter.position.x = lerp(0, 10, scalePercent(scrollPercent, 40, 70));
-        jupiter.position.y = lerp(0, 0.5, scalePercent(scrollPercent, 40, 70));
-        jupiter.position.z = lerp(-4, -8.2, scalePercent(scrollPercent, 40, 70));
+        jupiter.position.x = lerp(0, 10, scalePercent(scrollPercent, this.start, this.end));
+        jupiter.position.y = lerp(0, 0.5, scalePercent(scrollPercent, this.start, this.end));
+        jupiter.position.z = lerp(-4, -8.2, scalePercent(scrollPercent, this.start, this.end));
+        jupiter.rotation.y = lerp(Math.PI, Math.PI * 1.6, scalePercent(scrollPercent, this.start, this.end));
       }
     }
   });
 
-    // 70-90% scroll
-    animationScripts.push({
-      start: 70,
-      end: 90,
-      func: (scrollPercent) => {
-        camera.lookAt(0, 0, -4)
-        camera.position.z = (3.4);
-        camera.position.x = (15);
-        camera.position.y = (2);
-      }
-    });
-
-  // 90-100% scroll
   animationScripts.push({
-    start: 90,
+    start: 55,
+    end: 80,
+    func: function(scrollPercent) {
+      camera.lookAt(0, 0, -4);
+      camera.position.z = 3.4;
+      camera.position.x = 15;
+      camera.position.y = 2;
+
+      if (jupiter) {
+        jupiter.rotation.y = lerp(Math.PI * 1.6, Math.PI * 2.2 , scalePercent(scrollPercent, this.start, this.end));
+      }
+    }
+  });
+
+  animationScripts.push({
+    start: 80,
     end: 100,
-    func: (scrollPercent) => {
-      // Desplazamiento horizontal hacia la derecha
+    func: function(scrollPercent) {
       camera.position.set(0, -1000, 0);
       camera.lookAt(0, -1000, -5);
     }
@@ -87,6 +87,7 @@ function setupAnimations(camera) {
 
   return animationScripts;
 }
+
 
 // Función para ejecutar las animaciones según el scroll actual
 function playScrollAnimations(scrollPercent, animations) {
