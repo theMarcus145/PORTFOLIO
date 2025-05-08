@@ -40,7 +40,7 @@ function loadGalaxy(modelPath, scene) {
       galaxy.position.set(-300, 120, -1400);
       galaxy.rotation.x = THREE.MathUtils.degToRad(55);
       galaxy.rotation.z = THREE.MathUtils.degToRad(-20);
-      galaxy.scale.set(15, 15, 15);
+      galaxy.scale.set(30, 30, 30);
 
       galaxy.traverse(node => {
         if (node.isMesh) node.castShadow = true;
@@ -73,7 +73,7 @@ function loadCluster(modelPath, scene) {
       cluster.position.set(-300, 120, -1400);
       cluster.rotation.x = THREE.MathUtils.degToRad(55);
       cluster.rotation.z = THREE.MathUtils.degToRad(-40);
-      cluster.scale.set(50, 50, 50);
+      cluster.scale.set(100, 100, 100);
 
       cluster.traverse(node => {
         if (node.isMesh) node.castShadow = true;
@@ -94,8 +94,8 @@ function loadSun(modelPath, scene) {
     const loader = new GLTFLoader();
     loader.load(modelPath, (gltf) => {
       sun = gltf.scene;
-      sun.position.set(900, 400, 120);
-      sun.scale.set(1.6, 1.6, 1.6);
+      sun.position.set(900, 400, 20);
+      sun.scale.set(5, 5, 5);
 
       sun.traverse(node => {
         if (node.isMesh) {
@@ -121,8 +121,8 @@ function loadRays(modelPath, scene) {
     const loader = new GLTFLoader();
     loader.load(modelPath, (gltf) => {
       rays = gltf.scene;
-      rays.position.set(900, 393.5, 119.3);
-      rays.scale.set(9, 9, 9);
+      rays.position.set(900, 386, 19);
+      rays.scale.set(24, 24, 24);
 
       rays.traverse(node => {
         if (node.isMesh) node.castShadow = true;
@@ -130,7 +130,7 @@ function loadRays(modelPath, scene) {
 
       scene.add(rays);
 
-      // ✅ Añadir animaciones si existen
+      // Añadir animaciones
       if (gltf.animations && gltf.animations.length > 0) {
         raysMixer = new THREE.AnimationMixer(rays);
         gltf.animations.forEach((clip) => {
