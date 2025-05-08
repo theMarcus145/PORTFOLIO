@@ -40,7 +40,7 @@ function loadGalaxy(modelPath, scene) {
       galaxy.position.set(-300, 120, -1400);
       galaxy.rotation.x = THREE.MathUtils.degToRad(55);
       galaxy.rotation.z = THREE.MathUtils.degToRad(-20);
-      galaxy.scale.set(30, 30, 30);
+      galaxy.scale.set(25, 25, 25);
 
       galaxy.traverse(node => {
         if (node.isMesh) node.castShadow = true;
@@ -73,7 +73,7 @@ function loadCluster(modelPath, scene) {
       cluster.position.set(-300, 120, -1400);
       cluster.rotation.x = THREE.MathUtils.degToRad(55);
       cluster.rotation.z = THREE.MathUtils.degToRad(-40);
-      cluster.scale.set(100, 100, 100);
+      cluster.scale.set(70, 70, 70);
 
       cluster.traverse(node => {
         if (node.isMesh) node.castShadow = true;
@@ -121,7 +121,7 @@ function loadRays(modelPath, scene) {
     const loader = new GLTFLoader();
     loader.load(modelPath, (gltf) => {
       rays = gltf.scene;
-      rays.position.set(900, 386, 19);
+      rays.position.set(900, 384.5, 19);
       rays.scale.set(24, 24, 24);
 
       rays.traverse(node => {
